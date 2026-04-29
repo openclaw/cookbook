@@ -1,5 +1,17 @@
 import { useMemo, useState } from "react";
-import { Bot, CheckCircle2, CircleDashed, Clock3, Play, Search, XCircle } from "lucide-react";
+import {
+  AlertTriangle,
+  Bot,
+  CheckCircle2,
+  CircleDashed,
+  Clock3,
+  LayoutDashboard,
+  Play,
+  Search,
+  SlidersHorizontal,
+  TimerReset,
+  XCircle,
+} from "lucide-react";
 import { OpenClaw, type RunStatus } from "@openclaw/sdk";
 
 type BoardRun = {
@@ -50,9 +62,19 @@ const columns: Array<{ status: RunStatus; label: string }> = [
   { status: "timed_out", label: "Timed out" },
 ];
 
+const filters: Array<{ value: RunStatus | "all"; label: string }> = [
+  { value: "all", label: "All" },
+  { value: "accepted", label: "Active" },
+  { value: "completed", label: "Done" },
+  { value: "failed", label: "Failed" },
+  { value: "cancelled", label: "Stopped" },
+  { value: "timed_out", label: "Timed out" },
+];
+
 function iconFor(status: RunStatus) {
   if (status === "completed") return <CheckCircle2 size={17} />;
-  if (status === "failed" || status === "cancelled" || status === "timed_out") {
+  if (status === "timed_out") return <TimerReset size={17} />;
+  if (status === "failed" || status === "cancelled") {
     return <XCircle size={17} />;
   }
   return <CircleDashed size={17} />;
@@ -66,16 +88,31 @@ function relativeTime(timestamp: number): string {
 export function App() {
   const [runs, setRuns] = useState(initialRuns);
   const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<RunStatus | "all">("all");
   const [creating, setCreating] = useState(false);
+  const statusCounts = useMemo(
+    () =>
+      runs.reduce(
+        (counts, run) => ({
+          ...counts,
+          [run.status]: (counts[run.status] ?? 0) + 1,
+        }),
+        {} as Partial<Record<RunStatus, number>>,
+      ),
+    [runs],
+  );
   const visibleRuns = useMemo(() => {
     const normalized = query.trim().toLowerCase();
-    if (!normalized) return runs;
-    return runs.filter((run) =>
-      [run.title, run.sessionKey, run.model, run.summary].some((value) =>
-        value.toLowerCase().includes(normalized),
-      ),
-    );
-  }, [query, runs]);
+    return runs.filter((run) => {
+      const matchesStatus = statusFilter === "all" || run.status === statusFilter;
+      const matchesQuery =
+        !normalized ||
+        [run.title, run.sessionKey, run.model, run.summary].some((value) =>
+          value.toLowerCase().includes(normalized),
+        );
+      return matchesStatus && matchesQuery;
+    });
+  }, [query, runs, statusFilter]);
 
   async function createRun() {
     setCreating(true);
@@ -112,39 +149,66 @@ export function App() {
         <div>
           <p className="eyebrow">OpenClaw SDK</p>
           <h1>Run Board</h1>
+          <p className="lede">A live operations board for SDK-created agent runs.</p>
         </div>
         <button onClick={createRun} disabled={creating}>
           <Play size={16} />
-          New run
+          {creating ? "Running" : "New run"}
         </button>
       </header>
 
       <section className="metrics">
         <div>
-          <Bot />
+          <LayoutDashboard />
           <strong>{runs.length}</strong>
           <span>Total runs</span>
         </div>
         <div>
           <CheckCircle2 />
-          <strong>{runs.filter((run) => run.status === "completed").length}</strong>
+          <strong>{statusCounts.completed ?? 0}</strong>
           <span>Completed</span>
         </div>
         <div>
           <Clock3 />
-          <strong>{runs.filter((run) => run.status === "accepted").length}</strong>
+          <strong>{statusCounts.accepted ?? 0}</strong>
           <span>Active queue</span>
+        </div>
+        <div>
+          <AlertTriangle />
+          <strong>
+            {(statusCounts.failed ?? 0) +
+              (statusCounts.cancelled ?? 0) +
+              (statusCounts.timed_out ?? 0)}
+          </strong>
+          <span>Needs review</span>
         </div>
       </section>
 
-      <label className="search">
-        <Search size={16} />
-        <input
-          placeholder="Filter by model, session, title..."
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-        />
-      </label>
+      <section className="command-strip">
+        <label className="search">
+          <Search size={16} />
+          <input
+            id="run-search"
+            name="run-search"
+            placeholder="Filter by model, session, title..."
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+        </label>
+        <div className="filters" aria-label="Status filter">
+          <SlidersHorizontal size={16} />
+          {filters.map((filter) => (
+            <button
+              className={statusFilter === filter.value ? "active" : ""}
+              key={filter.value}
+              onClick={() => setStatusFilter(filter.value)}
+              type="button"
+            >
+              {filter.label}
+            </button>
+          ))}
+        </div>
+      </section>
 
       <section className="columns">
         {columns.map((column) => {
@@ -155,30 +219,38 @@ export function App() {
                 {column.label}
                 <span>{columnRuns.length}</span>
               </h2>
-              {columnRuns.map((run) => (
-                <div className="card" key={run.id}>
-                  <div className={`state ${run.status}`}>
-                    {iconFor(run.status)}
-                    {run.status}
+              {columnRuns.length === 0 ? (
+                <div className="empty-lane">No matching runs.</div>
+              ) : (
+                columnRuns.map((run) => (
+                  <div className={`card ${run.status}`} key={run.id}>
+                    <div className={`state ${run.status}`}>
+                      {iconFor(run.status)}
+                      {run.status}
+                    </div>
+                    <h3>{run.title}</h3>
+                    <p>{run.summary}</p>
+                    <dl>
+                      <div>
+                        <dt>Session</dt>
+                        <dd>{run.sessionKey}</dd>
+                      </div>
+                      <div>
+                        <dt>Model</dt>
+                        <dd>{run.model}</dd>
+                      </div>
+                      <div>
+                        <dt>Updated</dt>
+                        <dd>{relativeTime(run.updatedAt)}</dd>
+                      </div>
+                    </dl>
+                    <small className="run-id">
+                      <Bot size={13} />
+                      {run.id}
+                    </small>
                   </div>
-                  <h3>{run.title}</h3>
-                  <p>{run.summary}</p>
-                  <dl>
-                    <div>
-                      <dt>Session</dt>
-                      <dd>{run.sessionKey}</dd>
-                    </div>
-                    <div>
-                      <dt>Model</dt>
-                      <dd>{run.model}</dd>
-                    </div>
-                    <div>
-                      <dt>Updated</dt>
-                      <dd>{relativeTime(run.updatedAt)}</dd>
-                    </div>
-                  </dl>
-                </div>
-              ))}
+                ))
+              )}
             </article>
           );
         })}
