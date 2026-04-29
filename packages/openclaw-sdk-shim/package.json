@@ -1,0 +1,12 @@
+{
+  "name": "@openclaw/sdk",
+  "version": "0.0.0-cookbook-shim",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  }
+}

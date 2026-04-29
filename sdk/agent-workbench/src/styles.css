@@ -1,0 +1,206 @@
+:root {
+  color: #18201b;
+  background: #f4f0e8;
+  font-family:
+    Avenir Next,
+    "Segoe UI",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  font-synthesis: none;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    linear-gradient(90deg, rgba(24, 32, 27, 0.05) 1px, transparent 1px),
+    linear-gradient(rgba(24, 32, 27, 0.04) 1px, transparent 1px), #f4f0e8;
+  background-size: 36px 36px;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.workbench-shell {
+  width: min(1240px, calc(100vw - 32px));
+  margin: 0 auto;
+  padding: 32px 0;
+}
+
+.hero {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  min-height: 190px;
+  border-bottom: 2px solid #18201b;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #d45b2c;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  max-width: 740px;
+  font-family: Georgia, ui-serif, serif;
+  font-size: clamp(48px, 8vw, 104px);
+  line-height: 0.92;
+}
+
+.lede {
+  max-width: 660px;
+  font-size: 18px;
+}
+
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  border: 2px solid #18201b;
+  padding: 10px 14px;
+  background: #d6f06f;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 16px;
+  padding-top: 16px;
+}
+
+.panel {
+  border: 2px solid #18201b;
+  background: rgba(255, 252, 244, 0.94);
+  box-shadow: 6px 6px 0 #18201b;
+  padding: 18px;
+}
+
+.controls {
+  grid-row: span 3;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+input,
+textarea {
+  border: 2px solid #18201b;
+  border-radius: 0;
+  padding: 12px;
+  background: #fffaf0;
+  color: #18201b;
+}
+
+textarea {
+  min-height: 170px;
+  resize: vertical;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.toolbar {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 2px solid #18201b;
+  padding: 11px 14px;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.primary {
+  background: #1e6f5c;
+  color: white;
+}
+
+.ghost,
+.icon {
+  background: #fffaf0;
+}
+
+.assistant-text {
+  min-height: 160px;
+  white-space: pre-wrap;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+.event-log {
+  min-height: 220px;
+}
+
+.event-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid rgba(24, 32, 27, 0.18);
+  padding: 9px 0;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+.event-row small {
+  color: #5d675f;
+}
+
+pre {
+  overflow: auto;
+  margin: 0;
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .status-pill {
+    margin-bottom: 18px;
+  }
+
+  .grid,
+  .split {
+    grid-template-columns: 1fr;
+  }
+}

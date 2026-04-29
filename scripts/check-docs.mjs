@@ -31,6 +31,23 @@ if (!fs.existsSync(path.join(root, "examples", "node-cli", "src", "index.ts"))) 
   failures.push("missing node-cli example entry");
 }
 
+const sdkExamples = ["quickstart", "coding-agent-cli", "agent-workbench", "run-board"];
+for (const id of sdkExamples) {
+  const base = path.join(root, "sdk", id);
+  for (const file of ["README.md", "package.json", "tsconfig.json"]) {
+    if (!fs.existsSync(path.join(base, file))) {
+      failures.push(`sdk/${id}: missing ${file}`);
+    }
+  }
+  const packageJson = JSON.parse(fs.readFileSync(path.join(base, "package.json"), "utf8"));
+  if (!packageJson.scripts?.check) {
+    failures.push(`sdk/${id}: missing check script`);
+  }
+  if (!readme.includes(`sdk/${id}`)) {
+    failures.push(`README missing link to sdk/${id}`);
+  }
+}
+
 if (failures.length > 0) {
   console.error(failures.join("\n"));
   process.exitCode = 1;

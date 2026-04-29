@@ -5,9 +5,10 @@
   "type": "module",
   "packageManager": "pnpm@10.23.0",
   "scripts": {
-    "check": "pnpm format:check && pnpm typecheck && pnpm test && pnpm docs:check",
+    "check": "pnpm format:check && pnpm typecheck && pnpm test && pnpm docs:check && pnpm examples:check",
     "docs:check": "node scripts/check-docs.mjs",
     "example:node-cli": "tsx examples/node-cli/src/index.ts",
+    "examples:check": "pnpm --filter @openclaw/cookbook-quickstart check && pnpm --filter @openclaw/cookbook-coding-agent-cli check && pnpm --filter @openclaw/cookbook-agent-workbench check && pnpm --filter @openclaw/cookbook-run-board check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "recipe:cancel-a-run": "tsx recipes/cancel-a-run/index.ts",
@@ -19,17 +20,17 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
-  "peerDependencies": {
-    "@openclaw/sdk": "*"
-  },
-  "peerDependenciesMeta": {
-    "@openclaw/sdk": {
-      "optional": true
-    }
+  "dependencies": {
+    "@openclaw/sdk": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
+    "@vitejs/plugin-react": "^5.1.2",
+    "vite": "^7.3.0",
     "prettier": "^3.7.4",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "lucide-react": "^0.562.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^4.1.5"

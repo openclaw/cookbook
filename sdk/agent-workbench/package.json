@@ -1,0 +1,28 @@
+{
+  "name": "@openclaw/cookbook-agent-workbench",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.23.0",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && vite build",
+    "check": "pnpm typecheck && pnpm build",
+    "dev": "vite",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@openclaw/sdk": "workspace:*",
+    "@vitejs/plugin-react": "^5.1.2",
+    "lucide-react": "^0.562.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "vite": "^7.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.12.2",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^5.9.3"
+  }
+}

@@ -23,3 +23,7 @@ pnpm check
 Until `@openclaw/sdk` is published, tests use `test/shims/openclaw-sdk.ts`.
 That shim is only a local validation aid; recipe source should still reflect the
 real public SDK API.
+
+Standalone examples live under `sdk/<name>`. Each example should have its own
+`package.json`, `README.md`, `tsconfig.json`, and `check` script. Add new
+examples to the root README and `scripts/check-docs.mjs`.
