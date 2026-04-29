@@ -1,0 +1,37 @@
+{
+  "name": "@openclaw/cookbook",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.23.0",
+  "scripts": {
+    "check": "pnpm format:check && pnpm typecheck && pnpm test && pnpm docs:check",
+    "docs:check": "node scripts/check-docs.mjs",
+    "example:node-cli": "tsx examples/node-cli/src/index.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "recipe:cancel-a-run": "tsx recipes/cancel-a-run/index.ts",
+    "recipe:custom-transport": "tsx recipes/custom-transport/index.ts",
+    "recipe:model-status": "tsx recipes/model-status/index.ts",
+    "recipe:reuse-session": "tsx recipes/reuse-session/index.ts",
+    "recipe:run-agent": "tsx recipes/run-an-agent/index.ts",
+    "recipe:stream-events": "tsx recipes/stream-events/index.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@openclaw/sdk": "*"
+  },
+  "peerDependenciesMeta": {
+    "@openclaw/sdk": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "prettier": "^3.7.4",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.5"
+  }
+}

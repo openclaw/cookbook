@@ -1,0 +1,38 @@
+[
+  {
+    "id": "run-an-agent",
+    "title": "Run an agent",
+    "entry": "recipes/run-an-agent/index.ts",
+    "readme": "recipes/run-an-agent/README.md"
+  },
+  {
+    "id": "stream-events",
+    "title": "Stream events",
+    "entry": "recipes/stream-events/index.ts",
+    "readme": "recipes/stream-events/README.md"
+  },
+  {
+    "id": "cancel-a-run",
+    "title": "Cancel a run",
+    "entry": "recipes/cancel-a-run/index.ts",
+    "readme": "recipes/cancel-a-run/README.md"
+  },
+  {
+    "id": "reuse-session",
+    "title": "Reuse a session",
+    "entry": "recipes/reuse-session/index.ts",
+    "readme": "recipes/reuse-session/README.md"
+  },
+  {
+    "id": "model-status",
+    "title": "Model status",
+    "entry": "recipes/model-status/index.ts",
+    "readme": "recipes/model-status/README.md"
+  },
+  {
+    "id": "custom-transport",
+    "title": "Custom transport",
+    "entry": "recipes/custom-transport/index.ts",
+    "readme": "recipes/custom-transport/README.md"
+  }
+]
