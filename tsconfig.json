@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "declaration": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noEmit": true,
+    "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2022",
+    "types": ["node", "vitest/globals"]
+  },
+  "include": [
+    "examples/**/*.ts",
+    "recipes/**/*.ts",
+    "scripts/**/*.mjs",
+    "test/**/*.ts",
+    "types/**/*.d.ts",
+    "vitest.config.ts"
+  ]
+}
