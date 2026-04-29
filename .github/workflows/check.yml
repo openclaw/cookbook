@@ -1,6 +1,7 @@
 name: Check
 
 on:
+  workflow_dispatch:
   pull_request:
   push:
     branches:
@@ -9,8 +10,12 @@ on:
 permissions:
   contents: read
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   check:
+    name: Cookbook and examples
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

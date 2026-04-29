@@ -2,15 +2,15 @@
 
 Runnable examples for building on the OpenClaw SDK.
 
-This repository is the public, copyable companion to the SDK. The recipes are
-small enough to paste into an app, while the examples show how to compose them
-into complete developer workflows.
+This repository is the public, copyable companion to the SDK. It has two layers:
+small recipes that fit in one file, and standalone SDK examples that can be
+copied out as apps.
 
 ## Status
 
 The SDK package is landing in `openclaw/openclaw` first. Until `@openclaw/sdk`
-is published, this repo keeps a tiny test shim so CI can validate recipe shape
-without depending on a live Gateway or unpublished package.
+is published, this repo keeps a local workspace shim so CI can validate recipe
+and example shape without depending on a live Gateway or unpublished package.
 
 ## Quick Start
 
@@ -51,7 +51,16 @@ Useful environment variables:
 | [`model-status`](recipes/model-status)         | Check configured model providers and auth status.   |
 | [`custom-transport`](recipes/custom-transport) | Test SDK code with an in-memory transport.          |
 
-## Examples
+## SDK Examples
+
+| Example                                    | What it is                                                    |
+| ------------------------------------------ | ------------------------------------------------------------- |
+| [`quickstart`](sdk/quickstart)             | The smallest complete run, stream, wait flow.                 |
+| [`coding-agent-cli`](sdk/coding-agent-cli) | One-shot and interactive terminal agent with slash commands.  |
+| [`agent-workbench`](sdk/agent-workbench)   | Web control room for runs, events, cancellation, and results. |
+| [`run-board`](sdk/run-board)               | Dashboard-style operator view grouped by run status.          |
+
+## Recipe Wrapper Example
 
 | Example                         | What it is                                            |
 | ------------------------------- | ----------------------------------------------------- |
@@ -64,9 +73,10 @@ pnpm format:check
 pnpm typecheck
 pnpm test
 pnpm docs:check
+pnpm examples:check
 pnpm check
 ```
 
-The test suite aliases `@openclaw/sdk` to `test/shims/openclaw-sdk.ts`. That
-shim exists only for cookbook validation. Recipe source imports `@openclaw/sdk`
-directly so copied code matches real SDK usage.
+The workspace includes a local private package named `@openclaw/sdk` so CI can
+validate examples before the SDK is published. Recipe and example source imports
+`@openclaw/sdk` directly so copied code matches real SDK usage.
