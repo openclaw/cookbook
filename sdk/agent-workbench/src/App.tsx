@@ -1,5 +1,17 @@
 import { useMemo, useState } from "react";
-import { Activity, Bot, CircleStop, Play, Radio, RotateCcw, Terminal } from "lucide-react";
+import {
+  Activity,
+  Bot,
+  Braces,
+  CircleStop,
+  Gauge,
+  Play,
+  Radio,
+  RotateCcw,
+  Signal,
+  Terminal,
+  Workflow,
+} from "lucide-react";
 import { OpenClaw, type OpenClawEvent, type RunResult } from "@openclaw/sdk";
 
 type EventRow = Pick<OpenClawEvent, "type" | "runId" | "ts"> & {
@@ -31,6 +43,20 @@ function terminal(type: string): boolean {
   );
 }
 
+function eventTone(type: string): "good" | "bad" | "warn" | "live" {
+  if (type === "run.completed") return "good";
+  if (type === "run.failed" || type === "run.cancelled") return "bad";
+  if (type === "run.timed_out") return "warn";
+  return "live";
+}
+
+function formatClock(timestamp: string | number | undefined): string {
+  if (!timestamp) return "--:--:--";
+  const date = typeof timestamp === "number" ? new Date(timestamp) : new Date(timestamp);
+  if (Number.isNaN(date.getTime())) return "--:--:--";
+  return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+}
+
 export function App() {
   const [settings, setSettings] = useState(defaults);
   const [events, setEvents] = useState<EventRow[]>([]);
@@ -45,6 +71,9 @@ export function App() {
         .join(""),
     [events],
   );
+  const latestEvent = events.length ? events[events.length - 1] : undefined;
+  const runId = result?.runId ?? latestEvent?.runId ?? "standby";
+  const runState = result?.status ?? (running ? "streaming" : "idle");
 
   async function startRun() {
     setRunning(true);
@@ -93,17 +122,49 @@ export function App() {
             A compact control room for running agents, watching event streams, and cancelling work.
           </p>
         </div>
-        <div className="status-pill">
-          <Radio size={16} />
-          {running ? "streaming" : "ready"}
+        <div className="signal-stack" aria-label="Run state">
+          <span className={`status-pill ${running ? "live" : "idle"}`}>
+            <Radio size={16} />
+            {running ? "streaming" : "ready"}
+          </span>
+          <span>{runId}</span>
+        </div>
+      </section>
+
+      <section className="telemetry">
+        <div>
+          <Signal size={18} />
+          <span>State</span>
+          <strong>{runState}</strong>
+        </div>
+        <div>
+          <Activity size={18} />
+          <span>Events</span>
+          <strong>{events.length}</strong>
+        </div>
+        <div>
+          <Gauge size={18} />
+          <span>Session</span>
+          <strong>{settings.sessionKey || "default"}</strong>
+        </div>
+        <div>
+          <Workflow size={18} />
+          <span>Model</span>
+          <strong>{settings.model || "agent default"}</strong>
         </div>
       </section>
 
       <section className="grid">
         <form className="panel controls" onSubmit={(event) => (event.preventDefault(), startRun())}>
+          <div className="panel-title">
+            <Braces size={18} />
+            Run controls
+          </div>
           <label>
             Gateway
             <input
+              id="gateway"
+              name="gateway"
               value={settings.gateway}
               onChange={(event) => setSettings({ ...settings, gateway: event.target.value })}
             />
@@ -112,6 +173,8 @@ export function App() {
             <label>
               Agent
               <input
+                id="agentId"
+                name="agentId"
                 value={settings.agentId}
                 onChange={(event) => setSettings({ ...settings, agentId: event.target.value })}
               />
@@ -119,6 +182,8 @@ export function App() {
             <label>
               Session
               <input
+                id="sessionKey"
+                name="sessionKey"
                 value={settings.sessionKey}
                 onChange={(event) => setSettings({ ...settings, sessionKey: event.target.value })}
               />
@@ -127,6 +192,8 @@ export function App() {
           <label>
             Model override
             <input
+              id="model"
+              name="model"
               placeholder="optional"
               value={settings.model}
               onChange={(event) => setSettings({ ...settings, model: event.target.value })}
@@ -135,6 +202,8 @@ export function App() {
           <label>
             Prompt
             <textarea
+              id="prompt"
+              name="prompt"
               value={settings.prompt}
               onChange={(event) => setSettings({ ...settings, prompt: event.target.value })}
             />
@@ -155,37 +224,63 @@ export function App() {
             </button>
             <button className="icon" type="button" onClick={() => (setEvents([]), setResult(null))}>
               <RotateCcw size={16} />
+              <span className="sr-only">Reset</span>
             </button>
           </div>
         </form>
 
         <section className="panel transcript">
-          <div className="panel-title">
-            <Bot size={18} />
-            Assistant stream
+          <div className="panel-title split-title">
+            <span>
+              <Bot size={18} />
+              Assistant stream
+            </span>
+            <small>{assistantText.length.toLocaleString()} chars</small>
           </div>
           <div className="assistant-text">
-            {assistantText || "Run an agent to see streamed text."}
+            <span className="line-gutter">01</span>
+            <span>{assistantText || "Run an agent to see streamed text."}</span>
           </div>
         </section>
 
         <section className="panel event-log">
-          <div className="panel-title">
-            <Activity size={18} />
-            Events
+          <div className="panel-title split-title">
+            <span>
+              <Activity size={18} />
+              Event timeline
+            </span>
+            <small>{formatClock(latestEvent?.ts)}</small>
           </div>
-          {events.map((event, index) => (
-            <div className="event-row" key={`${event.type}-${index}`}>
-              <span>{event.type}</span>
-              <small>{event.runId ?? "no run id"}</small>
-            </div>
-          ))}
+          <div className="timeline">
+            {events.length === 0 ? (
+              <div className="empty-state">No events captured.</div>
+            ) : (
+              events.map((event, index) => (
+                <div
+                  className={`event-row ${eventTone(event.type)}`}
+                  key={`${event.type}-${index}`}
+                >
+                  <span className="event-dot" />
+                  <div>
+                    <strong>{event.type}</strong>
+                    <small>{event.runId ?? "no run id"}</small>
+                  </div>
+                  <time>{formatClock(event.ts)}</time>
+                </div>
+              ))
+            )}
+          </div>
         </section>
 
         <section className="panel result">
-          <div className="panel-title">
-            <Terminal size={18} />
-            Result
+          <div className="panel-title split-title">
+            <span>
+              <Terminal size={18} />
+              Result
+            </span>
+            <small className={`result-badge ${result?.status ?? "idle"}`}>
+              {result?.status ?? "pending"}
+            </small>
           </div>
           <pre>{result ? JSON.stringify(result, null, 2) : "No result yet."}</pre>
         </section>
