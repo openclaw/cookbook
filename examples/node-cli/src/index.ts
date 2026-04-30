@@ -39,9 +39,11 @@ async function main(argv: string[]): Promise<unknown> {
 
 try {
   const result = await main(process.argv.slice(2));
-  console.log(
-    typeof result === "string" ? result : JSON.stringify(redactSensitiveOutput(result), null, 2),
-  );
+  if (typeof result === "string") {
+    process.stdout.write(`${result}\n`);
+  } else {
+    console.log(JSON.stringify(redactSensitiveOutput(result), null, 2));
+  }
 } catch (error) {
   console.error(error instanceof Error ? error.message : String(error));
   process.exitCode = 1;
