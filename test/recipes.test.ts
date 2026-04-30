@@ -4,6 +4,7 @@ import { customTransportRecipe } from "../recipes/custom-transport/index.js";
 import { modelStatusRecipe } from "../recipes/model-status/index.js";
 import { reuseSessionRecipe } from "../recipes/reuse-session/index.js";
 import { runAgentRecipe } from "../recipes/run-an-agent/index.js";
+import { redactSensitiveOutput } from "../recipes/_shared/run-main.js";
 import { streamEventsRecipe } from "../recipes/stream-events/index.js";
 
 describe("cookbook recipes", () => {
@@ -49,5 +50,17 @@ describe("cookbook recipes", () => {
 
     expect(result.runId).toBe("cookbook-run");
     expect(result.calls.map((call) => call.method)).toEqual(["agent", "agent.wait"]);
+  });
+
+  it("redacts sensitive fields before console output", () => {
+    expect(
+      redactSensitiveOutput({
+        sessionKey: "cookbook-demo",
+        nested: { token: "abc123", ok: true },
+      }),
+    ).toEqual({
+      sessionKey: "[REDACTED]",
+      nested: { token: "[REDACTED]", ok: true },
+    });
   });
 });

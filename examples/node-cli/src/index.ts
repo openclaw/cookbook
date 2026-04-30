@@ -2,6 +2,7 @@ import { cancelRunRecipe } from "../../../recipes/cancel-a-run/index.js";
 import { modelStatusRecipe } from "../../../recipes/model-status/index.js";
 import { reuseSessionRecipe } from "../../../recipes/reuse-session/index.js";
 import { runAgentRecipe } from "../../../recipes/run-an-agent/index.js";
+import { redactSensitiveOutput } from "../../../recipes/_shared/run-main.js";
 import { streamEventsRecipe } from "../../../recipes/stream-events/index.js";
 
 function usage(): string {
@@ -38,7 +39,9 @@ async function main(argv: string[]): Promise<unknown> {
 
 try {
   const result = await main(process.argv.slice(2));
-  console.log(typeof result === "string" ? result : JSON.stringify(result, null, 2));
+  console.log(
+    typeof result === "string" ? result : JSON.stringify(redactSensitiveOutput(result), null, 2),
+  );
 } catch (error) {
   console.error(error instanceof Error ? error.message : String(error));
   process.exitCode = 1;
