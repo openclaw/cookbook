@@ -3,14 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@10.23.0",
   "scripts": {
-    "check": "pnpm format:check && pnpm typecheck && pnpm test && pnpm docs:check && pnpm examples:check",
+    "check": "pnpm format:check && pnpm typecheck && pnpm lint && pnpm test && pnpm docs:check && pnpm examples:check",
     "docs:check": "node scripts/check-docs.mjs",
     "example:node-cli": "tsx examples/node-cli/src/index.ts",
     "examples:check": "pnpm --filter @openclaw/cookbook-quickstart check && pnpm --filter @openclaw/cookbook-coding-agent-cli check && pnpm --filter @openclaw/cookbook-agent-workbench check && pnpm --filter @openclaw/cookbook-run-board check",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check .",
+    "lint": "oxlint --deny-warnings recipes examples sdk packages scripts test types",
     "recipe:cancel-a-run": "tsx recipes/cancel-a-run/index.ts",
     "recipe:custom-transport": "tsx recipes/custom-transport/index.ts",
     "recipe:model-status": "tsx recipes/model-status/index.ts",
@@ -18,21 +18,25 @@
     "recipe:run-agent": "tsx recipes/run-an-agent/index.ts",
     "recipe:stream-events": "tsx recipes/stream-events/index.ts",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsgo --noEmit"
   },
   "dependencies": {
     "@openclaw/sdk": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^24.10.1",
-    "@vitejs/plugin-react": "^5.1.2",
-    "vite": "^7.3.0",
-    "prettier": "^3.7.4",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "lucide-react": "^0.562.0",
+    "@types/node": "^25.6.0",
+    "@typescript/native-preview": "7.0.0-dev.20260503.1",
+    "@vitejs/plugin-react": "^6.0.1",
+    "lucide-react": "^1.14.0",
+    "oxfmt": "^0.47.0",
+    "oxlint": "^1.62.0",
+    "oxlint-tsgolint": "^0.22.1",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.10",
     "vitest": "^4.1.5"
-  }
+  },
+  "packageManager": "pnpm@10.23.0"
 }
