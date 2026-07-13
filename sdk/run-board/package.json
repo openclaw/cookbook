@@ -12,17 +12,17 @@
   },
   "dependencies": {
     "@openclaw/sdk": "workspace:*",
-    "@vitejs/plugin-react": "^6.0.1",
-    "lucide-react": "^1.14.0",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5",
-    "vite": "^8.0.16"
+    "@vitejs/plugin-react": "^6.0.3",
+    "lucide-react": "^1.24.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "vite": "^8.1.4"
   },
   "devDependencies": {
-    "@types/node": "^25.6.0",
-    "@types/react": "^19.2.14",
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   },
-  "packageManager": "pnpm@10.23.0"
+  "packageManager": "pnpm@10.34.5"
 }
