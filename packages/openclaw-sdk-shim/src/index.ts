@@ -243,7 +243,7 @@ export class OpenClaw {
     status: async (_params?: unknown) => ({
       providers: [
         { id: "openai", authenticated: true, defaultModel: "gpt-5.4" },
-        { id: "anthropic", authenticated: true, defaultModel: "sonnet-4.6" },
+        { id: "anthropic", authenticated: true, defaultModel: "claude-sonnet-4-6" },
         { id: "openrouter", authenticated: false },
       ],
     }),

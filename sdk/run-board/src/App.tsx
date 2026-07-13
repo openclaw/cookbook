@@ -38,7 +38,7 @@ const initialRuns: BoardRun[] = [
     id: "run_ui_2",
     title: "Workbench UI review",
     sessionKey: "apps",
-    model: "sonnet-4.6",
+    model: "claude-sonnet-4-6",
     status: "accepted",
     updatedAt: Date.now() - 1000 * 60 * 12,
     summary: "Waiting for event stream.",
