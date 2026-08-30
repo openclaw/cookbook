@@ -1,4 +1,5 @@
 import { OpenClaw } from "@openclaw/sdk";
+import { redactSensitiveOutput } from "./redact-sensitive-output.js";
 
 const oc = new OpenClaw({
   gateway: process.env.OPENCLAW_GATEWAY ?? "auto",
@@ -38,7 +39,7 @@ try {
   }
 
   const result = await run.wait({ timeoutMs: 120_000 });
-  process.stdout.write(`\n\n${JSON.stringify(result, null, 2)}\n`);
+  process.stdout.write(`\n\n${JSON.stringify(redactSensitiveOutput(result), null, 2)}\n`);
 } finally {
   await oc.close();
 }

@@ -1,6 +1,7 @@
 import { createInterface } from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
 import { OpenClaw, type Run } from "@openclaw/sdk";
+import { redactSensitiveOutput } from "./redact-sensitive-output.js";
 
 type CliState = {
   agentId: string;
@@ -64,7 +65,7 @@ async function sendPrompt(prompt: string): Promise<void> {
       }
     }
     const result = await run.wait({ timeoutMs: 120_000 });
-    output.write(`\n${JSON.stringify(result, null, 2)}\n`);
+    output.write(`\n${JSON.stringify(redactSensitiveOutput(result), null, 2)}\n`);
   } finally {
     if (state.currentRun === run) {
       state.currentRun = null;
@@ -87,14 +88,18 @@ async function runCommand(line: string): Promise<boolean> {
       output.write(`session=${state.sessionKey}\n`);
       return true;
     case "/status":
-      output.write(`${JSON.stringify(await oc.models.status({ probe: false }), null, 2)}\n`);
+      output.write(
+        `${JSON.stringify(redactSensitiveOutput(await oc.models.status({ probe: false })), null, 2)}\n`,
+      );
       return true;
     case "/cancel":
       if (!state.currentRun) {
         output.write("No active run.\n");
         return true;
       }
-      output.write(`${JSON.stringify(await state.currentRun.cancel(), null, 2)}\n`);
+      output.write(
+        `${JSON.stringify(redactSensitiveOutput(await state.currentRun.cancel()), null, 2)}\n`,
+      );
       return true;
     case "/exit":
     case "/quit":
