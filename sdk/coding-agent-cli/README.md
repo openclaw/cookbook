@@ -26,5 +26,6 @@ pnpm dev
 - `/model <model>` sets a model override for future runs.
 - `/session <key>` switches the session key.
 - `/status` prints Gateway model/auth status.
-- `/cancel` cancels the active run.
+- `/cancel` cancels the active run. Type it while events are still streaming.
+- Ctrl+C also cancels the active run. A second Ctrl+C exits when idle.
 - `/exit` exits.
