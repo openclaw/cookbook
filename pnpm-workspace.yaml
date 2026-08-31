@@ -4,10 +4,7 @@ packages:
   - "sdk/*"
 
 overrides:
-  body-parser: 2.2.1
-  esbuild: 0.28.1
-  ip-address: 10.1.1
-  qs: 6.15.2
-  vite: 8.1.5
+  esbuild: 0.28.2
+  vite: 8.2.2
 
 minimumReleaseAge: 2880
