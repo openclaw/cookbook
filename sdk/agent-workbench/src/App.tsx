@@ -13,6 +13,7 @@ import {
   Workflow,
 } from "lucide-react";
 import { OpenClaw, type OpenClawEvent, type RunResult } from "@openclaw/sdk";
+import { formatRunResultJson } from "./format-run-result-json.js";
 
 type EventRow = Pick<OpenClawEvent, "type" | "runId" | "ts"> & {
   text?: string;
@@ -282,7 +283,7 @@ export function App() {
               {result?.status ?? "pending"}
             </small>
           </div>
-          <pre>{result ? JSON.stringify(result, null, 2) : "No result yet."}</pre>
+          <pre>{result ? formatRunResultJson(result) : "No result yet."}</pre>
         </section>
       </section>
     </main>

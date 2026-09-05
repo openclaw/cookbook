@@ -21,3 +21,7 @@ pnpm dev
 Open the Vite URL and run the demo. The cookbook shim makes the app work during
 local CI; once `@openclaw/sdk` is published, the same UI can point at a real
 Gateway.
+
+The Result panel masks session keys and credential-like fields in structured JSON.
+Session controls and streamed assistant text remain visible, so this does not
+sanitize an entire screenshot or recording.
