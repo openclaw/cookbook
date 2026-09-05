@@ -13,15 +13,15 @@
   "dependencies": {
     "@openclaw/sdk": "workspace:*",
     "@vitejs/plugin-react": "^6.1.1",
-    "lucide-react": "^1.35.0",
+    "lucide-react": "^1.40.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "vite": "^8.2.2"
   },
   "devDependencies": {
-    "@types/node": "^26.4.0",
+    "@types/node": "^26.4.1",
     "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.5",
+    "@types/react-dom": "^19.2.7",
     "typescript": "^7.0.2"
   },
   "packageManager": "pnpm@10.34.5"
