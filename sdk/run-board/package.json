@@ -13,7 +13,7 @@
   "dependencies": {
     "@openclaw/sdk": "workspace:*",
     "@vitejs/plugin-react": "^6.1.1",
-    "lucide-react": "^1.40.0",
+    "lucide-react": "^1.41.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "vite": "^8.2.2"
