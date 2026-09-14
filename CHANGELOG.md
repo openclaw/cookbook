@@ -1,5 +1,7 @@
 # Changelog
 
+## Unreleased
+
 ## 0.1.0 - 2026-09-14
 
 **Highlights:** Six runnable SDK recipes and four copyable starter apps, with responsive terminal cancellation and sensitive-field redaction in CLI and Workbench Result JSON output.
