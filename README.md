@@ -174,6 +174,10 @@ Standalone SDK examples live under `sdk/<name>`. Include a local README,
 `package.json`, `tsconfig.json`, and a `check` script, then add the example to
 this README and [`scripts/check-docs.mjs`](scripts/check-docs.mjs).
 
+## Releases
+
+See [RELEASING.md](RELEASING.md) for signed source releases and verification.
+
 ## License
 
 MIT. See [`LICENSE`](LICENSE).
