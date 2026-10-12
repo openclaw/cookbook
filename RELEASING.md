@@ -1,101 +1,70 @@
 # Releasing the Cookbook
 
-Cookbook releases are source snapshots: an SSH-signed Git tag and a GitHub
-Release. All workspace packages are private. Do not publish them to npm or
-attach build artifacts. GitHub supplies the source archives automatically.
-
-This follows the frozen-source, verified-tag, exact-changelog publication
-conventions in [OpenClaw release workflows](https://github.com/openclaw/release-workflows).
-The cookbook uses the manual process below because the shared binary release
-workflows do not apply to this source-only repository.
+Cookbook ships source snapshots on GitHub, using
+[`release-source.yml@v1`](https://github.com/openclaw/release-workflows/blob/v1/.github/workflows/release-source.yml).
+All workspace packages remain private; there is no npm publication, native
+binary, Homebrew formula, or deployment. The workflow attaches frozen-commit
+source tar/zip archives, release notes, an inventory, and checksums.
 
 ## Prepare
 
-Start from a clean, current `main`. Finalize every entry in `## Unreleased` under
-`## X.Y.Z - YYYY-MM-DD`, using the maintainer's local date. Keep contributor
-credits and put a one-sentence `**Highlights:**` line first. Order features and
-user-visible fixes before compatibility notes, then tooling and documentation.
+From current `main`, move the intended `Unreleased` entries into exactly one
+`## X.Y.Z - YYYY-MM-DD` section using the maintainer's local date. Preserve
+contributor credits and lead with a one-sentence `**Highlights:**` paragraph.
+Set the root and four `sdk/*/package.json` versions to that release version.
+Keep the SDK shim at `0.0.0-cookbook-shim`; it is not the public SDK release.
 
-Set the root and four starter `package.json` versions to the release version.
-Keep `packages/openclaw-sdk-shim/package.json` at `0.0.0-cookbook-shim`: it is
-a local validation aid, not a release of the public SDK.
+Run the same credential-free checks as the release build:
 
-Run the full gate:
-
-```bash
+```sh
+node scripts/verify-release.mjs
 pnpm install --frozen-lockfile
 pnpm check
 ```
 
-This covers formatting, type checking, lint, tests, documentation checks, all
-starter builds, and compiled CLI smoke tests. Review the release diff, open a
-PR, and squash-merge it only after its checks pass. Wait for the `Check` and
-CodeQL runs on the resulting exact `main` commit to succeed before tagging.
+`pnpm check` builds and smoke-tests the compiled starter CLIs as well as running
+formatting, lint, type, unit, documentation, and example checks. The workflow
+installs the pinned pnpm 10.34.5 before these checks.
 
-## Verify the web starters
+For browser verification, serve the Agent Workbench and Run Board builds with
+their `preview` scripts and check that HTML and referenced assets load. They use
+the workspace SDK shim; that check does not prove a live Gateway connection.
 
-There is no hosted documentation site or deployment workflow. Both web starters
-build as part of `pnpm check`. From the release commit, serve each build and
-verify that its HTML and referenced JavaScript/CSS assets return HTTP 200:
+## Publish through Actions
 
-```bash
-pnpm --filter @openclaw/cookbook-agent-workbench preview --host 127.0.0.1 --port 4173 --strictPort
-pnpm --filter @openclaw/cookbook-run-board preview --host 127.0.0.1 --port 4174 --strictPort
+After the preparation PR and push CI pass on the exact merged commit, create a
+signed annotated `vX.Y.Z` tag using the release SSH key authorized by
+`.github/release-allowed-signers`, verify it, and push only that tag. Never move
+an existing tag or reuse a published version. The tag starts `Release`; do not
+publish locally or create a GitHub Release by hand.
+
+The shared workflow freezes the commit, checks protected-main ancestry, the SSH
+signature, version metadata, dated changelog notes, and green independent push
+CI. It then runs the checks below and binds the payload to two independent
+verifiers before publication. A live dispatch also requires an existing signed
+tag; it cannot silently substitute an unsigned tag.
+
+## No-publish rehearsal
+
+Dispatch `Release` on the current protected `main` with the version matching its
+metadata and a dated changelog section. `dry_run` defaults to `true`:
+
+```sh
+gh workflow run release.yml --repo openclaw/cookbook --ref main -f version=0.1.0 -F dry_run=true
 ```
 
-Run the preview commands in separate terminals and stop them after verification.
-These demos use the workspace SDK shim; serving them does not validate a live
-Gateway connection.
-
-## Tag and publish
-
-Pull the merged release commit and record its SHA. Immediately before tagging,
-check both local/remote tags and GitHub Releases; stop if the version already
-exists. Never move or replace a release tag.
-
-```bash
-git switch main
-git pull --ff-only
-git status -sb
-git fetch origin --tags
-git tag --list
-gh release list --repo openclaw/cookbook --limit 3 --json tagName
-git rev-parse HEAD
-```
-
-Use the designated release SSH signing key through the maintainer's credential
-workflow. `.github/release-allowed-signers` records the authorized public key.
-The private key is supplied only to the signing command, never committed.
-
-With `version`, `release_commit`, and `signing_key` set to the verified release
-version, exact CI-green SHA, and temporary signing-key path:
-
-```bash
-git -c gpg.format=ssh -c user.signingkey="$signing_key" tag -s "v$version" "$release_commit" -m "Release $version"
-git -c gpg.format=ssh -c gpg.ssh.allowedSignersFile=.github/release-allowed-signers verify-tag "v$version"
-git push origin "refs/tags/v$version"
-```
-
-Copy only the dated changelog section's contents to a temporary notes file,
-starting with Highlights and excluding the version heading. Preserve every
-entry and credit exactly. Publish without generated notes or extra assets:
-
-```bash
-gh release create "v$version" --repo openclaw/cookbook --verify-tag --title "v$version" --notes-file "$notes_file" --latest
-```
-
-Use the authenticated GitHub CLI appropriate to the maintainer's environment.
-There is no tag-triggered release workflow; publication is this explicit command.
+This checks current main even when that version has an older tag. It neither
+creates nor changes tags, GitHub Releases, registry versions, or deployments.
+Only the release pipeline's checks run; ordinary push workflows remain separate.
 
 ## Verify and close out
 
-Read the GitHub Release through the REST API and verify its tag, published
-state, exact changelog body, and empty asset list. Resolve the remote annotated
-tag to the recorded release commit and verify its signature. Record the
-successful CI run URLs and web-starter HTTP checks.
+Confirm the Actions run succeeded and the GitHub Release has the expected
+signed tag, frozen commit, exact dated changelog section, inventory, and
+`SHA256SUMS`. Download the attached payload and verify its checksums. Never
+replace an existing release's assets to fix a failed attempt.
 
-Open one empty `## Unreleased` section above the released section, leaving the
-published section intact. Keep package versions at the released version until
-preparing the next release. Review and squash-merge this follow-up PR, then
-leave the local checkout clean on `main` at `origin/main`. Remove task branches
-and generated `dist` directories.
+Keep the released changelog section intact. Open an empty `## Unreleased`
+section if one is absent, review and merge the follow-up, and leave `main` clean
+and current. No release is complete while its independent CI or publication
+verification is failing.
