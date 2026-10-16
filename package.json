@@ -27,18 +27,18 @@
     "@openclaw/sdk": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^26.4.1",
+    "@types/node": "^26.6.5",
     "@typescript/native-preview": "7.0.0-dev.20260707.2",
-    "@vitejs/plugin-react": "^6.1.1",
-    "lucide-react": "^1.41.0",
-    "oxfmt": "^0.66.0",
-    "oxlint": "^1.81.0",
-    "oxlint-tsgolint": "^7.0.2001",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "tsx": "^4.23.13",
+    "@vitejs/plugin-react": "^6.1.2",
+    "lucide-react": "^1.56.0",
+    "oxfmt": "^0.73.0",
+    "oxlint": "^1.88.0",
+    "oxlint-tsgolint": "^7.0.2004",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2",
-    "vite": "^8.2.2",
+    "vite": "8.3.4",
     "vitest": "^4.1.11"
   },
   "engines": {
