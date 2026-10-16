@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh React/Vite, starter types, icons, and development tooling; update transitive tinypool and source-map-js dependencies to fix prototype-pollution and denial-of-service advisories.
+
 ## 0.1.0 - 2026-09-14
 
 **Highlights:** Six runnable SDK recipes and four copyable starter apps, with responsive terminal cancellation and sensitive-field redaction in CLI and Workbench Result JSON output.
