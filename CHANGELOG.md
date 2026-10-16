@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.1.1 - 2026-10-16
+
+**Highlights:** Updated starter dependencies and development tooling, including fixes for prototype-pollution and denial-of-service security advisories.
+
 - Refresh React/Vite, starter types, icons, and development tooling; update transitive tinypool and source-map-js dependencies to fix prototype-pollution and denial-of-service advisories.
 
 ## 0.1.0 - 2026-09-14
