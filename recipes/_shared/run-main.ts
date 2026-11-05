@@ -19,14 +19,14 @@ export async function runMain(action: () => Promise<unknown>): Promise<void> {
 }
 
 export function redactSensitiveOutput(value: unknown, seen = new WeakSet<object>()): unknown {
-  if (Array.isArray(value)) {
-    return value.map((entry) => redactSensitiveOutput(entry, seen));
-  }
   if (value && typeof value === "object") {
     if (seen.has(value)) {
       return "[Circular]";
     }
     seen.add(value);
+    if (Array.isArray(value)) {
+      return value.map((entry) => redactSensitiveOutput(entry, seen));
+    }
     return Object.fromEntries(
       Object.entries(value).map(([key, entry]) => [
         key,
