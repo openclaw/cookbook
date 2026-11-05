@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Handle circular arrays in recipe and starter-app output redaction without losing sensitive-field masking. Thanks @embrace897.
+- Update Vitest to its patched release to address mocker code-injection and path-traversal advisories.
+- Refresh React, Vite, starter icons, type definitions, and lint tooling within the supported versions and dependency cooldown.
+
 ## 0.1.1 - 2026-10-16
 
 **Highlights:** Updated starter dependencies and development tooling, including fixes for prototype-pollution and denial-of-service security advisories.
