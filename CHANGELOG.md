@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Pin the source-release workflow to a reviewed revision that verifies existing release contents before retrying.
 - Handle circular arrays in recipe and starter-app output redaction without losing sensitive-field masking. Thanks @embrace897.
 - Update Vitest to its patched release to address mocker code-injection and path-traversal advisories.
 - Refresh React, Vite, starter icons, type definitions, and lint tooling within the supported versions and dependency cooldown.

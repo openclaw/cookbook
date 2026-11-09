@@ -1,7 +1,7 @@
 # Releasing the Cookbook
 
-Cookbook ships source snapshots on GitHub, using
-[`release-source.yml@v1`](https://github.com/openclaw/release-workflows/blob/v1/.github/workflows/release-source.yml).
+Cookbook ships source snapshots on GitHub, using the source-release workflow
+pinned in [release.yml](.github/workflows/release.yml).
 All workspace packages remain private; there is no npm publication, native
 binary, Homebrew formula, or deployment. The workflow attaches frozen-commit
 source tar/zip archives, release notes, an inventory, and checksums.
