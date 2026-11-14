@@ -8,7 +8,7 @@
     "docs:check": "node scripts/check-docs.mjs",
     "example:node-cli": "tsx examples/node-cli/src/index.ts",
     "examples:check": "pnpm shim:build && pnpm --filter @openclaw/cookbook-quickstart check && pnpm --filter @openclaw/cookbook-coding-agent-cli check && pnpm --filter @openclaw/cookbook-agent-workbench check && pnpm --filter @openclaw/cookbook-run-board check",
-    "examples:smoke": "pnpm --filter @openclaw/cookbook-quickstart start -- \"Cookbook smoke\" && pnpm --filter @openclaw/cookbook-coding-agent-cli start -- \"Cookbook smoke\"",
+    "examples:smoke": "pnpm --filter @openclaw/cookbook-quickstart start \"Cookbook smoke\" && pnpm --filter @openclaw/cookbook-coding-agent-cli start \"Cookbook smoke\"",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
     "lint": "oxlint --deny-warnings recipes examples sdk packages scripts test types",

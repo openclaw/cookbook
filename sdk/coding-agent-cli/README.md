@@ -11,7 +11,7 @@ status, cancellation, and exit.
 ```bash
 pnpm install
 export OPENCLAW_GATEWAY=auto
-pnpm dev -- "Explain this project"
+pnpm dev "Explain this project"
 ```
 
 Start interactive mode:

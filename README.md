@@ -38,7 +38,7 @@ pnpm check
 Run the smallest local recipe:
 
 ```bash
-pnpm recipe:custom-transport -- "test prompt"
+pnpm recipe:custom-transport "test prompt"
 ```
 
 That recipe uses an in-memory transport, so it does not require a running
@@ -54,7 +54,7 @@ Gateway:
 pnpm add @openclaw/sdk
 export OPENCLAW_GATEWAY=auto
 export OPENCLAW_AGENT_ID=main
-pnpm recipe:run-agent -- "Summarize this repository"
+pnpm recipe:run-agent "Summarize this repository"
 ```
 
 Use explicit credentials for protected Gateways:
@@ -95,14 +95,14 @@ Start with the smallest thing that matches your product shape:
 
 ## Recipes
 
-| Recipe                                         | Command                                                                    | What It Shows                                          |
-| ---------------------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------ |
-| [`run-an-agent`](recipes/run-an-agent)         | `pnpm recipe:run-agent -- "Summarize this repository"`                     | Start a run and wait for a stable SDK result envelope. |
-| [`stream-events`](recipes/stream-events)       | `pnpm recipe:stream-events -- "Explain this branch"`                       | Subscribe to normalized SDK events for a run.          |
-| [`cancel-a-run`](recipes/cancel-a-run)         | `OPENCLAW_CANCEL_AFTER_MS=1500 pnpm recipe:cancel-a-run -- "Keep working"` | Cancel active work by run id.                          |
-| [`reuse-session`](recipes/reuse-session)       | `OPENCLAW_SESSION_KEY=cookbook-demo pnpm recipe:reuse-session`             | Create or reuse a session across multiple messages.    |
-| [`model-status`](recipes/model-status)         | `pnpm recipe:model-status`                                                 | Check configured model providers and auth status.      |
-| [`custom-transport`](recipes/custom-transport) | `pnpm recipe:custom-transport -- "test prompt"`                            | Test SDK code with an in-memory transport.             |
+| Recipe                                         | Command                                                                 | What It Shows                                          |
+| ---------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------ |
+| [`run-an-agent`](recipes/run-an-agent)         | `pnpm recipe:run-agent "Summarize this repository"`                     | Start a run and wait for a stable SDK result envelope. |
+| [`stream-events`](recipes/stream-events)       | `pnpm recipe:stream-events "Explain this branch"`                       | Subscribe to normalized SDK events for a run.          |
+| [`cancel-a-run`](recipes/cancel-a-run)         | `OPENCLAW_CANCEL_AFTER_MS=1500 pnpm recipe:cancel-a-run "Keep working"` | Cancel active work by run id.                          |
+| [`reuse-session`](recipes/reuse-session)       | `OPENCLAW_SESSION_KEY=cookbook-demo pnpm recipe:reuse-session`          | Create or reuse a session across multiple messages.    |
+| [`model-status`](recipes/model-status)         | `pnpm recipe:model-status`                                              | Check configured model providers and auth status.      |
+| [`custom-transport`](recipes/custom-transport) | `pnpm recipe:custom-transport "test prompt"`                            | Test SDK code with an in-memory transport.             |
 
 The recipe manifest lives at [`recipes/manifest.json`](recipes/manifest.json).
 
@@ -155,7 +155,7 @@ pnpm examples:check
 Useful targeted commands:
 
 ```bash
-pnpm recipe:run-agent -- "Summarize this repository"
+pnpm recipe:run-agent "Summarize this repository"
 pnpm --filter @openclaw/cookbook-quickstart check
 pnpm --filter @openclaw/cookbook-agent-workbench dev
 ```

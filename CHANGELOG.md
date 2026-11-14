@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Preserve prompt text in documented pnpm recipe commands and starter smoke scripts by removing forwarded argument separators. Thanks @embrace897.
+
 - Pin the source-release workflow to a reviewed revision that verifies existing release contents before retrying.
 - Handle circular arrays in recipe and starter-app output redaction without losing sensitive-field masking. Thanks @embrace897.
 - Update Vitest to its patched release to address mocker code-injection and path-traversal advisories.
