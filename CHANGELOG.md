@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Vite, React tooling, icons, formatting and lint packages, and Vitest 5; retain the two-day dependency cooldown and existing security overrides.
+
 - Preserve prompt text in documented pnpm recipe commands and starter smoke scripts by removing forwarded argument separators. Thanks @embrace897.
 
 - Pin the source-release workflow to a reviewed revision that verifies existing release contents before retrying.
