@@ -1,5 +1,7 @@
 # Agent Workbench
 
+If starting or processing a run fails, Run controls displays an accessible error alert without exposing raw provider errors. Retry the run or use Reset to clear the alert. The controls become available again after the SDK client finishes closing.
+
 A local web app for driving an OpenClaw agent run from a compact control room.
 
 It demonstrates:

@@ -63,6 +63,7 @@ export function App() {
   const [events, setEvents] = useState<EventRow[]>([]);
   const [result, setResult] = useState<RunResult | null>(null);
   const [running, setRunning] = useState(false);
+  const [runRequestFailed, setRunRequestFailed] = useState(false);
   const [cancel, setCancel] = useState<(() => Promise<unknown>) | null>(null);
   const assistantText = useMemo(
     () =>
@@ -77,6 +78,7 @@ export function App() {
   const runState = result?.status ?? (running ? "streaming" : "idle");
 
   async function startRun() {
+    setRunRequestFailed(false);
     setRunning(true);
     setEvents([]);
     setResult(null);
@@ -107,8 +109,6 @@ export function App() {
       }
       setResult(await run.wait({ timeoutMs: 120_000 }));
     } finally {
-      setCancel(null);
-      setRunning(false);
       await oc.close();
     }
   }
@@ -156,7 +156,18 @@ export function App() {
       </section>
 
       <section className="grid">
-        <form className="panel controls" onSubmit={(event) => (event.preventDefault(), startRun())}>
+        <form
+          className="panel controls"
+          onSubmit={(event) => {
+            event.preventDefault();
+            void startRun()
+              .catch(() => setRunRequestFailed(true))
+              .finally(() => {
+                setCancel(null);
+                setRunning(false);
+              });
+          }}
+        >
           <div className="panel-title">
             <Braces size={18} />
             Run controls
@@ -223,11 +234,22 @@ export function App() {
               <CircleStop size={16} />
               Cancel
             </button>
-            <button className="icon" type="button" onClick={() => (setEvents([]), setResult(null))}>
+            <button
+              className="icon"
+              type="button"
+              onClick={() => {
+                setEvents([]);
+                setResult(null);
+                setRunRequestFailed(false);
+              }}
+            >
               <RotateCcw size={16} />
               <span className="sr-only">Reset</span>
             </button>
           </div>
+          {runRequestFailed && (
+            <p role="alert">The run request failed. Check the Gateway connection and settings.</p>
+          )}
         </form>
 
         <section className="panel transcript">
