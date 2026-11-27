@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Stage weekly and PR CodeQL workflow coverage for Actions and JavaScript/TypeScript, with manual scans and native caching, for the managed security-setup cutover.
+
 - Show a safe, accessible Agent Workbench alert when a run request fails, restore the controls after cleanup, and clear the alert on retry or reset. Thanks @embrace897. #26
 - Refresh eligible icon, lint, and test dependencies while retaining the two-day maturity window and security overrides; add DOM regression coverage for Workbench failure and recovery.
 
